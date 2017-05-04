@@ -1,9 +1,9 @@
 //
-//  Constants.swift
-//  VimeoUpload
+//  Request+Purchasing.swift
+//  VimeoNetworkingExample-iOS
 //
-//  Created by Alfred Hanssen on 10/18/15.
-//  Copyright © 2015 Vimeo. All rights reserved.
+//  Created by Westendorf, Mike on 4/5/17.
+//  Copyright © 2016 Vimeo. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,8 +26,24 @@
 
 import Foundation
 
- /// Base URL for the Vimeo API
-public let VimeoBaseURLString = NSURL(string: "https://svod-tier-api.ci.vimeows.com")
+/// `Request` to validate an IAP.  Returns the updated VIMUser object after the purchased item has been unlocked.
+public typealias PurchaseRequest = Request<VIMUser>
 
- /// Default API version to use for requests
-internal let VimeoDefaultAPIVersionString = "3.2"
+public extension Request
+{
+    /**
+     Create a `Request` to validate an IAP receipt and unlock the purchased product (Vimeo internal use only)
+     
+     - parameter productURI: the URI of the product to unlock
+     - parameter storeReceipt: the Apple Store receipt
+     - parameter retryPolicy: the retry policy to use for this request.  Defaults to SingleAttempt.
+     
+     - returns: a new `Request`
+     */
+    static func validatePurchaseRequest(productURI productURI: String, storeReceipt: String, retryPolicy: RetryPolicy? = .SingleAttempt) -> Request
+    {
+        let parameters = ["receipt": storeReceipt]
+        
+        return Request(method: .PUT, path: productURI, parameters: parameters, retryPolicy: retryPolicy)
+    }
+}
