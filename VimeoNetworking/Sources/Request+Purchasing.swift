@@ -40,7 +40,7 @@ public extension Request
      
      - returns: a new `Request`
      */
-    static func validatePurchaseRequest(productURI productURI: String, storeReceipt: String, retryPolicy: RetryPolicy? = .SingleAttempt) -> Request
+    static func validatePurchaseRequest(productURI: String, storeReceipt: String, retryPolicy: RetryPolicy? = .singleAttempt) -> Request
     {
         let parameters = ["receipt": storeReceipt]
         
